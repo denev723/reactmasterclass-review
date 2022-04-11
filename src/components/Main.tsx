@@ -9,7 +9,7 @@ import Home from "../routes/Home";
 import TrelloClone from "../routes/TrelloClone";
 
 const Container = styled.div<{ isActive: boolean }>`
-    margin-left: ${(props) => (props.isActive ? "30vw" : 0)};
+    margin-left: ${(props) => (props.isActive ? "300px" : 0)};
 `;
 
 function Main() {
