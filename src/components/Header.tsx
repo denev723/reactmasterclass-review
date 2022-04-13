@@ -12,11 +12,14 @@ const HeaderEl = styled.header`
     text-align: center;
     position: relative;
     padding: 30px 10px;
-    border-bottom: 1px solid #222;
+    border-bottom: 1px solid ${(props) => props.theme.lineColor};
+    background-color: ${(props) => props.theme.headerBg};
 
     h1 {
         margin: 0;
         font-size: 48px;
+        font-weight: 800;
+        color: ${(props) => props.theme.headerFontColor};
     }
 `;
 
@@ -29,10 +32,11 @@ const BtnWrapper = styled.div`
 
 const SmBtn = styled.button`
     background-color: transparent;
-    border: 1px solid #222;
+    border: 1px solid ${(props) => props.theme.lineColor};
     border-radius: 8px;
     width: 39px;
     height: 39px;
+    color: ${(props) => props.theme.headerBtnColor};
     cursor: pointer;
 
     :not(:last-child) {
@@ -47,7 +51,11 @@ const GnbWrapper = styled.ul`
     transform: translateY(-50%);
 `;
 
-const GnbItem = styled.li``;
+const GnbItem = styled.li`
+    a {
+        color: ${(props) => props.theme.headerBtnColor};
+    }
+`;
 
 function Header() {
     const [isActive, setIsActive] = useRecoilState(isActiveAtom);
