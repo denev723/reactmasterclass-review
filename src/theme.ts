@@ -6,5 +6,10 @@ export const basicTheme: DefaultTheme = {
     headerBtnColor: "#222222",
     menuColor: "#514aac",
     menuHoverColor: "#00004f",
-    lineColor: "#222222"
+    lineColor: "#222222",
+    coinOverviewColor: "rgba(0, 0, 0, 0.5)",
+    coinMenuColor: "#ffffff",
+    coinFontColor: "#222222",
+    coinMenu: "#9c88ff",
+    coinFont: "#ffffff"
 };

@@ -8,5 +8,10 @@ declare module "styled-components" {
         menuColor: string;
         menuHoverColor: string;
         lineColor: string;
+        coinOverviewColor: string;
+        coinMenuColor: string;
+        coinFontColor: string;
+        coinMenu: string;
+        coinFont: string;
     }
 }

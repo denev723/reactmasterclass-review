@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Helmet from "react-helmet";
+import { fetchCoins } from "../api";
 import Loader from "../components/Loader";
 import coinImg from "../images/coin-img.png";
 
@@ -62,7 +65,7 @@ const CoinItem = styled.li`
     }
 `;
 
-interface IData {
+interface ICoins {
     id: string;
     is_active: boolean;
     is_new: boolean;
@@ -73,41 +76,48 @@ interface IData {
 }
 
 function CoinTracker() {
-    const [loading, setLoading] = useState(true);
-    const [data, setData] = useState<IData[]>([]);
-    const fetchData = async () => {
-        const reponse = await fetch("https://api.coinpaprika.com/v1/coins");
-        const json = await reponse.json();
-        setLoading(false);
-        setData(json.slice(0, 100));
-    };
+    // const [loading, setLoading] = useState(true);
+    // const [data, setData] = useState<ICoins[]>([]);
+    // const fetchData = async () => {
+    //     const reponse = await fetch("https://api.coinpaprika.com/v1/coins");
+    //     const json = await reponse.json();
+    //     setLoading(false);
+    //     setData(json.slice(0, 100));
+    // };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);
+
+    const { isLoading, data } = useQuery<ICoins[]>("coins", fetchCoins);
 
     return (
-        <Container>
-            <Title>Coin Tracker</Title>
-            {loading ? (
-                <Loader>Loading...</Loader>
-            ) : (
-                <CoinList>
-                    {data.map((item) => (
-                        <CoinItem key={item.id}>
-                            <Link
-                                to={{
-                                    pathname: `/coin-tracker/${item.id}`,
-                                    state: { name: item.name }
-                                }}>
-                                <span className="title">{item.name}</span>
-                                <span>&rarr;</span>
-                            </Link>
-                        </CoinItem>
-                    ))}
-                </CoinList>
-            )}
-        </Container>
+        <>
+            <Helmet>
+                <title>Coin Tracker</title>
+            </Helmet>
+            <Container>
+                <Title>Coin Tracker</Title>
+                {isLoading ? (
+                    <Loader>Loading...</Loader>
+                ) : (
+                    <CoinList>
+                        {data?.slice(0, 100).map((coin) => (
+                            <CoinItem key={coin.id}>
+                                <Link
+                                    to={{
+                                        pathname: `/coin-tracker/${coin.id}`,
+                                        state: { name: coin.name }
+                                    }}>
+                                    <span className="title">{coin.name}</span>
+                                    <span>&rarr;</span>
+                                </Link>
+                            </CoinItem>
+                        ))}
+                    </CoinList>
+                )}
+            </Container>
+        </>
     );
 }
 
