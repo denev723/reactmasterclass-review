@@ -79,7 +79,7 @@ const Description = styled.p`
 
 const Tabs = styled.ul`
     display: flex;
-    margin-top: 30px;
+    margin-top: 100px;
 `;
 
 const Tab = styled.li<{ active: boolean }>`
@@ -206,7 +206,7 @@ function Coin() {
             </Helmet>
             <Container>
                 <Title>
-                    {state?.name || coinId}
+                    {state?.name || info?.name}
                     <ListBtn to={"/coin-tracker"}>&larr;</ListBtn>
                 </Title>
                 {loading ? (
@@ -255,7 +255,7 @@ function Coin() {
                         </Tabs>
                         <Switch>
                             <Route path={`/coin-tracker/:coinId/price`}>
-                                <Price />
+                                <Price coinId={coinId} />
                             </Route>
                             <Route path={`/coin-tracker/:coinId/chart`}>
                                 <Chart coinId={coinId} />

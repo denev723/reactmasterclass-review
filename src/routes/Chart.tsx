@@ -4,7 +4,9 @@ import { fetchHistory } from "../api";
 import Loader from "../components/Loader";
 import ApexChart from "react-apexcharts";
 
-const Container = styled.div``;
+const Container = styled.div`
+    padding: 50px 0;
+`;
 
 interface ChartProps {
     coinId: string;
@@ -36,11 +38,19 @@ function Chart({ coinId }: ChartProps) {
                 <Loader>Loading Chart...</Loader>
             ) : (
                 <ApexChart
-                    type="line"
+                    type="candlestick"
                     series={[
                         {
                             name: "Price",
-                            data: data?.map((price) => price.close) ?? []
+                            data: data?.map((price) => ({
+                                x: price.time_close,
+                                y: [
+                                    price.open,
+                                    price.high,
+                                    price.low,
+                                    price.close
+                                ]
+                            })) as unknown as number[]
                         }
                     ]}
                     options={{
@@ -48,50 +58,99 @@ function Chart({ coinId }: ChartProps) {
                             mode: "light"
                         },
                         subtitle: {
-                            text: "Close Price Chart",
+                            text: "OHLC Price Chart",
                             margin: 50
                         },
-                        markers: {
-                            size: 7
-                        },
                         chart: {
-                            height: 300,
-                            width: 500,
-                            toolbar: {
-                                show: false
-                            },
-                            background: "transparent"
-                        },
-                        grid: { show: true },
-                        stroke: {
-                            curve: "straight",
-                            width: 4
-                        },
-                        yaxis: {
-                            show: true,
-                            labels: {
-                                style: {
-                                    colors: ["#222"]
+                            type: "candlestick",
+                            height: 900,
+                            background: "transparent",
+                            foreColor: "black",
+                            animations: {
+                                enabled: true,
+                                easing: "easeinout",
+                                speed: 800,
+                                animateGradually: {
+                                    enabled: true,
+                                    delay: 150
                                 },
-                                formatter: function (val, index) {
-                                    return val.toFixed(0);
+                                dynamicAnimation: {
+                                    enabled: true,
+                                    speed: 350
                                 }
                             }
                         },
                         xaxis: {
-                            axisBorder: { show: true },
-                            axisTicks: { show: true },
+                            type: "datetime"
+                        },
+                        yaxis: {
+                            show: true,
                             labels: {
-                                show: true,
-                                style: { colors: "#222222" }
-                            },
-                            type: "datetime",
-                            categories: data?.map((price) =>
-                                price.time_close.slice(6, 10)
-                            )
+                                formatter: function (val) {
+                                    return val.toFixed();
+                                }
+                            }
                         }
                     }}
                 />
+                // line - apex chart
+                // <ApexChart
+                //     type="line"
+                //     series={[
+                //         {
+                //             name: "Price",
+                //             data: data?.map((price) => price.close) ?? []
+                //         }
+                //     ]}
+                //     options={{
+                //         theme: {
+                //             mode: "light"
+                //         },
+                //         subtitle: {
+                //             text: "Close Price Chart",
+                //             margin: 50
+                //         },
+                //         markers: {
+                //             size: 7
+                //         },
+                //         chart: {
+                //             height: 300,
+                //             width: 500,
+                //             toolbar: {
+                //                 show: false
+                //             },
+                //             background: "transparent"
+                //         },
+                //         grid: { show: true },
+                //         stroke: {
+                //             curve: "straight",
+                //             width: 4
+                //         },
+                //         yaxis: {
+                //             show: true,
+                //             labels: {
+                //                 style: {
+                //                     colors: ["#222"]
+                //                 },
+                //                 formatter: function (val, index) {
+                //                     return val.toFixed(0);
+                //                 }
+                //             }
+                //         },
+                //         xaxis: {
+                //             axisBorder: { show: true },
+                //             axisTicks: { show: true },
+                //             labels: {
+                //                 show: true,
+                //                 style: { colors: "#222222" }
+                //             },
+                //             type: "datetime",
+                //             categories: data?.map((price) =>
+                //                 price.time_close.slice(6, 10)
+                //             )
+                //         }
+                //     }}
+                // />
             )}
         </Container>
     );

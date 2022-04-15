@@ -13,5 +13,6 @@ declare module "styled-components" {
         coinFontColor: string;
         coinMenu: string;
         coinFont: string;
+        bgColor: string;
     }
 }
