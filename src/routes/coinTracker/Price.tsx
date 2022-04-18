@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { fetchPrice } from "../api";
-import Loader from "../components/Loader";
+import { fetchPrice } from "../../api";
+import Loader from "../../components/Loader";
 
 const Container = styled.div``;
 

@@ -10,8 +10,8 @@ import {
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import { fetchInfo, fetchPrice } from "../api";
-import Loader from "../components/Loader";
+import { fetchInfo, fetchPrice } from "../../api";
+import Loader from "../../components/Loader";
 import Chart from "./Chart";
 import Price from "./Price";
 

@@ -3,9 +3,9 @@ import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
-import { fetchCoins } from "../api";
-import Loader from "../components/Loader";
-import coinImg from "../images/coin-img.png";
+import { fetchCoins } from "../../api";
+import Loader from "../../components/Loader";
+import coinImg from "../../images/coin-img.png";
 
 const Container = styled.div`
     max-width: 720px;

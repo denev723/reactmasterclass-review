@@ -1,8 +1,10 @@
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { fetchHistory } from "../api";
-import Loader from "../components/Loader";
+import { fetchHistory } from "../../api";
+import Loader from "../../components/Loader";
 import ApexChart from "react-apexcharts";
+import { useRecoilValue } from "recoil";
+import { themeAtom } from "../../atoms";
 
 const Container = styled.div`
     padding: 50px 0;
@@ -32,6 +34,8 @@ function Chart({ coinId }: ChartProps) {
         }
     );
 
+    const isLight = useRecoilValue(themeAtom);
+
     return (
         <Container>
             {isLoading ? (
@@ -55,7 +59,7 @@ function Chart({ coinId }: ChartProps) {
                     ]}
                     options={{
                         theme: {
-                            mode: "light"
+                            mode: isLight ? "light" : "dark"
                         },
                         subtitle: {
                             text: "OHLC Price Chart",
@@ -65,7 +69,7 @@ function Chart({ coinId }: ChartProps) {
                             type: "candlestick",
                             height: 900,
                             background: "transparent",
-                            foreColor: "black",
+                            foreColor: isLight ? "black" : "white",
                             animations: {
                                 enabled: true,
                                 easing: "easeinout",
@@ -79,6 +83,9 @@ function Chart({ coinId }: ChartProps) {
                                     speed: 350
                                 }
                             }
+                        },
+                        grid: {
+                            show: true
                         },
                         xaxis: {
                             type: "datetime"

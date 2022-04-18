@@ -65,6 +65,9 @@ function SideBar() {
                     <Link to={"/coin-tracker"}>Coin Tracker</Link>
                 </MenuItem>
                 <MenuItem>
+                    <Link to={"/recoil-todos"}>Recoil Todos</Link>
+                </MenuItem>
+                <MenuItem>
                     <Link to={"/trello-clone"}>Trello Clone</Link>
                 </MenuItem>
             </Menu>

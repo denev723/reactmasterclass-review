@@ -1,7 +1,8 @@
 import { Switch, Route } from "react-router-dom";
-import Coin from "./routes/Coin";
-import CoinTracker from "./routes/CoinTracker";
+import Coin from "./routes/coinTracker/Coin";
+import CoinTracker from "./routes/coinTracker/CoinTracker";
 import Home from "./routes/Home";
+import RecoilToDos from "./routes/recoilTodos/RecoilToDos";
 import TrelloClone from "./routes/TrelloClone";
 
 function Router() {
@@ -15,6 +16,9 @@ function Router() {
             </Route>
             <Route path={"/coin-tracker/:coinId"}>
                 <Coin />
+            </Route>
+            <Route path={"/recoil-todos"}>
+                <RecoilToDos />
             </Route>
             <Route path={"/trello-clone"}>
                 <TrelloClone />

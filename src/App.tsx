@@ -6,8 +6,8 @@ import { ThemeProvider } from "styled-components";
 import { basicTheme, darkTheme } from "./theme";
 import Header from "./components/Header";
 import SideBar from "./components/SideBar";
-import { useRecoilValue } from "recoil";
-import { isActiveAtom } from "./atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { isActiveAtom, themeAtom } from "./atoms";
 import { BrowserRouter } from "react-router-dom";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -37,7 +37,7 @@ const ToggleBtn = styled.button`
 `;
 
 function App() {
-    const [isLight, setIsLight] = useState(true);
+    const [isLight, setIsLight] = useRecoilState(themeAtom);
     const isActive = useRecoilValue(isActiveAtom);
 
     const toggleTheme = () => setIsLight((current) => !current);
