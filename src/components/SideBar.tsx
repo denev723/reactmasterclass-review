@@ -13,6 +13,7 @@ const Container = styled.div<{ isActive: boolean }>`
     display: flex;
     justify-content: center;
     z-index: 9;
+    transition: left 0.5s ease-in-out;
 `;
 
 const Menu = styled.ul`

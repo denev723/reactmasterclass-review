@@ -1,7 +1,7 @@
 import React from "react";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { IToDo, toDoState } from "../atoms";
+import { Categories, categoryState, IToDo, toDoState } from "../atoms";
 
 const Item = styled.li`
     display: flex;
@@ -14,6 +14,14 @@ const Item = styled.li`
     margin-bottom: 10px;
 
     div {
+        :first-child {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 20px;
+        }
+
         button {
             padding: 10px 12px;
 
@@ -40,25 +48,29 @@ function ToDo({ text, id, category }: IToDo) {
             ];
         });
     };
+    const deleteToDo = (e: React.MouseEvent<HTMLButtonElement>) => {
+        setToDos((oldToDos) => oldToDos.filter((toDo) => toDo.id !== id));
+    };
     return (
         <Item>
             <div>{text}</div>
             <div>
-                {category !== "DOING" && (
-                    <button name="DOING" onClick={onClick}>
+                {category !== Categories.DOING && (
+                    <button name={Categories.DOING} onClick={onClick}>
                         진행중
                     </button>
                 )}
-                {category !== "TO_DO" && (
-                    <button name="TO_DO" onClick={onClick}>
+                {category !== Categories.TO_DO && (
+                    <button name={Categories.TO_DO} onClick={onClick}>
                         해야할 일
                     </button>
                 )}
-                {category !== "DONE" && (
-                    <button name="DONE" onClick={onClick}>
+                {category !== Categories.DONE && (
+                    <button name={Categories.DONE} onClick={onClick}>
                         완료
                     </button>
                 )}
+                <button onClick={deleteToDo}>삭제</button>
             </div>
         </Item>
     );

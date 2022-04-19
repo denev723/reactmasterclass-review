@@ -26,6 +26,7 @@ const GlobalStyles = createGlobalStyle`
 const Container = styled.div<{ isActive: boolean }>`
     margin-left: ${(props) => (props.isActive ? "300px" : 0)};
     position: relative;
+    transition: margin-left 0.5s ease-in-out;
 `;
 
 const ToggleBtn = styled.button`

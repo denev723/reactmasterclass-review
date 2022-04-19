@@ -4,7 +4,8 @@ import { isActiveAtom } from "../atoms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faBars,
-    faHouseChimneyWindow
+    faHouseChimneyWindow,
+    faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router-dom";
 
@@ -72,7 +73,7 @@ function Header() {
         <HeaderEl>
             <BtnWrapper>
                 <SmBtn onClick={toggleSideBar}>
-                    <FontAwesomeIcon icon={faBars} />
+                    <FontAwesomeIcon icon={isActive ? faXmark : faBars} />
                 </SmBtn>
                 <SmBtn onClick={goHome}>
                     <FontAwesomeIcon icon={faHouseChimneyWindow} />

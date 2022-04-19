@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { toDoState } from "../atoms";
+import { categoryState, toDoState } from "../atoms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
@@ -12,13 +12,13 @@ const ToDoForm = styled.form`
 const FormRow = styled.div`
     display: flex;
     align-items: center;
+    height: 60px;
 `;
 
 const ToDoInput = styled.input`
     flex: 1;
     margin-right: 10px;
-    height: 56px;
-    padding: 0;
+    padding: 18px;
     font-size: 18px;
     border-radius: 8px;
 
@@ -29,7 +29,7 @@ const ToDoInput = styled.input`
 
 const SubmitBtn = styled.button`
     width: 60px;
-    height: 60px;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -43,6 +43,7 @@ interface IForm {
 
 function CreateToDo() {
     const setToDos = useSetRecoilState(toDoState);
+    const category = useRecoilValue(categoryState);
     const {
         register,
         handleSubmit,
@@ -51,7 +52,7 @@ function CreateToDo() {
     } = useForm<IForm>();
     const handleValid = ({ toDo }: IForm) => {
         setToDos((oldToDos) => [
-            { text: toDo, id: Date.now(), category: "TO_DO" },
+            { text: toDo, id: Date.now(), category },
             ...oldToDos
         ]);
         setValue("toDo", "");
@@ -65,11 +66,11 @@ function CreateToDo() {
                     })}
                     placeholder="할 일을 입력해주세요..."
                 />
-                {errors?.toDo?.message}
                 <SubmitBtn>
                     <FontAwesomeIcon icon={faPlus} />
                 </SubmitBtn>
             </FormRow>
+            <p>{errors?.toDo?.message}</p>
         </ToDoForm>
     );
 }

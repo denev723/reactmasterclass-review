@@ -1,6 +1,6 @@
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { toDoState } from "../../atoms";
+import { toDoSelector, toDoState } from "../../atoms";
 import CreateToDo from "../../components/CreateToDo";
 import ToDo from "../../components/ToDo";
 
@@ -17,17 +17,51 @@ const Title = styled.h2`
     margin-bottom: 50px;
 `;
 
-const List = styled.ul``;
+const SubTitle = styled.h3`
+    font-size: 24px;
+    margin-bottom: 15px;
+    text-align: center;
+`;
+
+const List = styled.ul`
+    width: 100%;
+`;
+
+const FlexWrapper = styled.div`
+    display: flex;
+    margin-bottom: 50px;
+
+    ul {
+        width: 50%;
+        &:first-child {
+            margin-right: 10px;
+        }
+    }
+`;
 
 function RecoilToDos() {
-    const toDos = useRecoilValue(toDoState);
-    console.log(toDos);
+    const [toDos, doing, done] = useRecoilValue(toDoSelector);
     return (
         <Container>
             <Title>Recoil To Do List</Title>
             <CreateToDo />
+            <FlexWrapper>
+                <List>
+                    <SubTitle>{toDos.length > 0 ? "해야할 일" : null}</SubTitle>
+                    {toDos.map((toDo) => (
+                        <ToDo key={toDo.id} {...toDo} />
+                    ))}
+                </List>
+                <List>
+                    <SubTitle>{doing.length > 0 ? "진행중" : null}</SubTitle>
+                    {doing.map((toDo) => (
+                        <ToDo key={toDo.id} {...toDo} />
+                    ))}
+                </List>
+            </FlexWrapper>
             <List>
-                {toDos.map((toDo) => (
+                <SubTitle>{done.length > 0 ? "완료" : null}</SubTitle>
+                {done.map((toDo) => (
                     <ToDo key={toDo.id} {...toDo} />
                 ))}
             </List>
