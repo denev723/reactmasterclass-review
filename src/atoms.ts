@@ -47,3 +47,16 @@ export const toDoSelector = selector({
         ];
     }
 });
+
+interface ITrelloState {
+    [key: string]: string[];
+}
+
+export const trelloState = atom<ITrelloState>({
+    key: "trelloToDo",
+    default: {
+        "To Do": ["a", "b"],
+        Doing: ["c", "d", "e"],
+        Done: ["f"]
+    }
+});
