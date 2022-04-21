@@ -1,4 +1,6 @@
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { trelloState } from "../atoms";
@@ -10,6 +12,7 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
     display: flex;
+    flex-direction: column;
     max-width: 720px;
     width: 100%;
     margin: 0 auto;
@@ -25,6 +28,17 @@ const Boards = styled.div`
     gap: 10px;
 `;
 
+const DeleteWrapper = styled.div`
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px !important;
+    background-color: #dadfe9;
+    border-radius: 5px;
+`;
+
 function TrelloClone() {
     const [toDos, setToDos] = useRecoilState(trelloState);
 
@@ -37,6 +51,7 @@ function TrelloClone() {
             // 보드 안에서 아이템 이동
             setToDos((allBoards) => {
                 const boardCopy = [...allBoards[source.droppableId]];
+                const taskObj = boardCopy[source.index];
                 // 1) Delete item on source.index
                 console.log("Delete item on", source.index);
                 console.log(boardCopy);
@@ -45,7 +60,7 @@ function TrelloClone() {
                 console.log(boardCopy);
                 // 2) Put back the item on the destination.index
                 console.log("Put back", draggableId, "on", destination.index);
-                boardCopy.splice(destination?.index, 0, draggableId);
+                boardCopy.splice(destination?.index, 0, taskObj);
                 console.log(boardCopy);
                 return {
                     ...allBoards,
@@ -53,22 +68,38 @@ function TrelloClone() {
                 };
             });
         }
-        if (destination.droppableId !== source.droppableId) {
+        if (
+            destination.droppableId !== source.droppableId &&
+            destination.droppableId !== "delete"
+        ) {
             // 보드간 아이템 이동
             setToDos((allBoards) => {
                 const sourceBoard = [...allBoards[source.droppableId]];
+                const taskObj = sourceBoard[source.index];
                 const destinationBoard = [
                     ...allBoards[destination.droppableId]
                 ];
 
                 sourceBoard.splice(source.index, 1);
-                destinationBoard.splice(destination.index, 0, draggableId);
+                destinationBoard.splice(destination.index, 0, taskObj);
                 return {
                     ...allBoards,
                     [source.droppableId]: sourceBoard,
                     [destination.droppableId]: destinationBoard
                 };
             });
+        }
+        if (destination.droppableId === "delete") {
+            if (window.confirm("정말 삭제하시겠습니까?")) {
+                setToDos((allBoards) => {
+                    const boardCopy = [...allBoards[source.droppableId]];
+                    boardCopy.splice(source.index, 1);
+                    return {
+                        ...allBoards,
+                        [source.droppableId]: boardCopy
+                    };
+                });
+            }
         }
         /*setToDos((oldToDos) => {
         기존 toDos 복사
@@ -99,6 +130,18 @@ function TrelloClone() {
                             />
                         ))}
                     </Boards>
+                    <DeleteWrapper>
+                        <Droppable droppableId="delete">
+                            {(magic, snapshot) => (
+                                <div
+                                    ref={magic.innerRef}
+                                    {...magic.droppableProps}>
+                                    <FontAwesomeIcon icon={faTrash} />
+                                    {magic.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </DeleteWrapper>
                 </Wrapper>
             </DragDropContext>
         </Container>

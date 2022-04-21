@@ -48,15 +48,20 @@ export const toDoSelector = selector({
     }
 });
 
+export interface ITrelloTodo {
+    id: number;
+    text: string;
+}
 interface ITrelloState {
-    [key: string]: string[];
+    [key: string]: ITrelloTodo[];
 }
 
 export const trelloState = atom<ITrelloState>({
     key: "trelloToDo",
     default: {
-        "To Do": ["a", "b"],
-        Doing: ["c", "d", "e"],
-        Done: ["f"]
-    }
+        "To Do": [],
+        Doing: [],
+        Done: []
+    },
+    effects_UNSTABLE: [persistAtom]
 });
