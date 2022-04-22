@@ -1,3 +1,5 @@
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
@@ -37,6 +39,24 @@ const Title = styled.h3`
     font-weight: 600;
     margin-bottom: 10px;
     font-size: 18px;
+    position: relative;
+
+    button {
+        visibility: hidden;
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        transition: visibility 0.5s ease-in-out;
+    }
+
+    &:hover {
+        button {
+            visibility: visible;
+            transition: visibility 0.5s ease-in-out;
+        }
+    }
 `;
 
 const Form = styled.form`
@@ -71,9 +91,25 @@ function Board({ toDos, boardId }: IBoard) {
         });
         setValue("toDo", "");
     };
+
+    const onClick = () => {
+        setToDos((allBoards) => {
+            const copyAll = { ...allBoards };
+            delete copyAll[boardId];
+            return {
+                ...copyAll
+            };
+        });
+    };
+
     return (
         <Wrapper>
-            <Title>{boardId}</Title>
+            <Title>
+                {boardId}
+                <button onClick={onClick}>
+                    <FontAwesomeIcon icon={faXmark} />
+                </button>
+            </Title>
             <Form onSubmit={handleSubmit(onValid)}>
                 <input
                     {...register("toDo", { required: "Tasks is required" })}

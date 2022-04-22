@@ -1,22 +1,33 @@
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { trelloState } from "../atoms";
-import Board from "../components/Board";
+import { trelloState } from "../../atoms";
+import Board from "../../components/Board";
 
 const Container = styled.div`
     background-color: #3f8cf2;
 `;
 
+const Wrap = styled.div`
+    max-width: 720px;
+    margin: 0 auto;
+`;
+
+const Title = styled.h2`
+    font-size: 36px;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 80px;
+    margin-bottom: 50px;
+`;
+
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    max-width: 720px;
     width: 100%;
-    margin: 0 auto;
-    justify-content: center;
     align-items: center;
     height: 100vh;
 `;
@@ -39,8 +50,23 @@ const DeleteWrapper = styled.div`
     border-radius: 5px;
 `;
 
+interface IForm {
+    name: string;
+}
+
 function TrelloClone() {
+    const { register, handleSubmit, setValue } = useForm<IForm>();
     const [toDos, setToDos] = useRecoilState(trelloState);
+
+    const onValid = ({ name }: IForm) => {
+        setToDos((allBoards) => {
+            return {
+                ...allBoards,
+                [name]: []
+            };
+        });
+        setValue("name", "");
+    };
 
     // drag가 완료되었을때 로직
     const onDragEnd = (info: DropResult) => {
@@ -117,33 +143,46 @@ function TrelloClone() {
         return toDosCopy;
         });*/
     };
+
     return (
         <Container>
-            <DragDropContext onDragEnd={onDragEnd}>
-                <Wrapper>
-                    <Boards>
-                        {Object.keys(toDos).map((boardId) => (
-                            <Board
-                                key={boardId}
-                                boardId={boardId}
-                                toDos={toDos[boardId]}
-                            />
-                        ))}
-                    </Boards>
-                    <DeleteWrapper>
-                        <Droppable droppableId="delete">
-                            {(magic, snapshot) => (
-                                <div
-                                    ref={magic.innerRef}
-                                    {...magic.droppableProps}>
-                                    <FontAwesomeIcon icon={faTrash} />
-                                    {magic.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    </DeleteWrapper>
-                </Wrapper>
-            </DragDropContext>
+            <Wrap>
+                <Title>Trello Clone</Title>
+                <form
+                    onSubmit={handleSubmit(onValid)}
+                    style={{ marginBottom: "50px" }}>
+                    <input
+                        {...register("name", { required: true })}
+                        type="text"
+                        placeholder="보드 이름을 입력해주세요.."
+                    />
+                </form>
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Wrapper>
+                        <Boards>
+                            {Object.keys(toDos).map((boardId) => (
+                                <Board
+                                    key={boardId}
+                                    boardId={boardId}
+                                    toDos={toDos[boardId]}
+                                />
+                            ))}
+                        </Boards>
+                        <DeleteWrapper>
+                            <Droppable droppableId="delete">
+                                {(magic, snapshot) => (
+                                    <div
+                                        ref={magic.innerRef}
+                                        {...magic.droppableProps}>
+                                        <FontAwesomeIcon icon={faTrash} />
+                                        {/* {magic.placeholder} */}
+                                    </div>
+                                )}
+                            </Droppable>
+                        </DeleteWrapper>
+                    </Wrapper>
+                </DragDropContext>
+            </Wrap>
         </Container>
     );
 }

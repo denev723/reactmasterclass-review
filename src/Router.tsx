@@ -3,7 +3,7 @@ import Coin from "./routes/coinTracker/Coin";
 import CoinTracker from "./routes/coinTracker/CoinTracker";
 import Home from "./routes/Home";
 import RecoilToDos from "./routes/recoilTodos/RecoilToDos";
-import TrelloClone from "./routes/TrelloClone";
+import TrelloClone from "./routes/trelloClone/TrelloClone";
 
 function Router() {
     return (

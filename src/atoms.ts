@@ -58,10 +58,6 @@ interface ITrelloState {
 
 export const trelloState = atom<ITrelloState>({
     key: "trelloToDo",
-    default: {
-        "To Do": [],
-        Doing: [],
-        Done: []
-    },
+    default: {},
     effects_UNSTABLE: [persistAtom]
 });
