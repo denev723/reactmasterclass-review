@@ -1,81 +1,53 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Droppable } from "react-beautiful-dnd";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { ITrelloTodo, trelloState } from "../atoms";
 import DraggableCard from "../components/DraggableCard";
 
-const Wrapper = styled.div`
-    padding: 10px 0px;
-    background-color: #dadfe9;
-    border-radius: 5px;
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+const Wrapper = styled.div<IWrapperProps>`
+    width: 300px;
+    color: #222;
+    margin-right: 30px;
+    flex: 0 0 auto;
+    background-color: ${(props) => (props.isMove ? "blue" : "cadetblue")};
 `;
+
+const Area = styled.div<IAreaProps>`
+    min-height: 200px;
+    height: auto;
+    background-color: ${(props) =>
+        props.isDraggingOver
+            ? "#6c5ce7"
+            : props.isDraggingFromThis
+            ? "#d63031"
+            : "red"};
+`;
+
+const Title = styled.h3``;
+
+const Form = styled.form``;
 
 interface IAreaProps {
     isDraggingOver: boolean;
     isDraggingFromThis: boolean;
 }
 
-const Area = styled.div<IAreaProps>`
-    padding: 20px;
-    background-color: ${(props) =>
-        props.isDraggingOver
-            ? "#dfe6e9"
-            : props.isDraggingFromThis
-            ? "#b2bec3"
-            : "transparent"};
-    flex-grow: 1;
-    transition: background-color 0.3s ease-in-out;
-`;
-
-const Title = styled.h3`
-    text-align: center;
-    font-weight: 600;
-    margin-bottom: 10px;
-    font-size: 18px;
-    position: relative;
-
-    button {
-        visibility: hidden;
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        transition: visibility 0.5s ease-in-out;
-    }
-
-    &:hover {
-        button {
-            visibility: visible;
-            transition: visibility 0.5s ease-in-out;
-        }
-    }
-`;
-
-const Form = styled.form`
-    width: 100%;
-    input {
-        width: 100%;
-    }
-`;
-
+interface IWrapperProps {
+    isMove: boolean;
+}
 interface IBoard {
     toDos: ITrelloTodo[];
     boardId: string;
+    index: number;
 }
-
 interface IForm {
     toDo: string;
 }
 
-function Board({ toDos, boardId }: IBoard) {
+function Board({ toDos, boardId, index }: IBoard) {
     const setToDos = useSetRecoilState(trelloState);
     const { register, handleSubmit, setValue } = useForm<IForm>();
     const onValid = ({ toDo }: IForm) => {
@@ -103,42 +75,52 @@ function Board({ toDos, boardId }: IBoard) {
     };
 
     return (
-        <Wrapper>
-            <Title>
-                {boardId}
-                <button onClick={onClick}>
-                    <FontAwesomeIcon icon={faXmark} />
-                </button>
-            </Title>
-            <Form onSubmit={handleSubmit(onValid)}>
-                <input
-                    {...register("toDo", { required: "Tasks is required" })}
-                    type="text"
-                    placeholder={`Add task on ${boardId}`}
-                />
-            </Form>
-            <Droppable droppableId={boardId}>
-                {(magic, snapshot) => (
-                    <Area
-                        isDraggingOver={snapshot.isDraggingOver}
-                        isDraggingFromThis={Boolean(
-                            snapshot.draggingFromThisWith
+        <Draggable draggableId={boardId} index={index} key={boardId}>
+            {(magic, snapshot) => (
+                <Wrapper
+                    isMove={snapshot.isDragging}
+                    ref={magic.innerRef}
+                    {...magic.dragHandleProps}
+                    {...magic.draggableProps}>
+                    <Title>
+                        {boardId}
+                        <button onClick={onClick}>
+                            <FontAwesomeIcon icon={faXmark} />
+                        </button>
+                    </Title>
+                    <Form onSubmit={handleSubmit(onValid)}>
+                        <input
+                            {...register("toDo", {
+                                required: "Tasks is required"
+                            })}
+                            type="text"
+                            placeholder={`Add task on ${boardId}`}
+                        />
+                    </Form>
+                    <Droppable droppableId={boardId}>
+                        {(magic, snapshot) => (
+                            <Area
+                                isDraggingOver={snapshot.isDraggingOver}
+                                isDraggingFromThis={Boolean(
+                                    snapshot.draggingFromThisWith
+                                )}
+                                ref={magic.innerRef}
+                                {...magic.droppableProps}>
+                                {toDos.map((toDo, index) => (
+                                    <DraggableCard
+                                        key={toDo.id}
+                                        index={index}
+                                        toDoId={toDo.id}
+                                        toDoText={toDo.text}
+                                    />
+                                ))}
+                                {magic.placeholder}
+                            </Area>
                         )}
-                        ref={magic.innerRef}
-                        {...magic.droppableProps}>
-                        {toDos.map((toDo, index) => (
-                            <DraggableCard
-                                key={toDo.id}
-                                index={index}
-                                toDoId={toDo.id}
-                                toDoText={toDo.text}
-                            />
-                        ))}
-                        {magic.placeholder}
-                    </Area>
-                )}
-            </Droppable>
-        </Wrapper>
+                    </Droppable>
+                </Wrapper>
+            )}
+        </Draggable>
     );
 }
 
