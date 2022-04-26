@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { trelloState } from "../atoms";
 
 const Container = styled.div`
-    margin-bottom: 50px;
+    margin: 0 100px 50px;
 
     input {
         width: 40%;

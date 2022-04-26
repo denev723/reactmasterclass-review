@@ -1,7 +1,7 @@
-import { Draggable, Droppable } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { ITrelloTodo, trelloState } from "../atoms";
+import { trelloState } from "../atoms";
 import Board from "./Board";
 
 const Container = styled.div`
@@ -10,6 +10,8 @@ const Container = styled.div`
     overflow-x: scroll;
     overflow-y: visible;
     margin: 0 100px;
+    padding-top: 70px;
+    position: relative;
 `;
 
 function Boards() {
@@ -24,6 +26,7 @@ function Boards() {
                             index={index}
                             boardId={boardId}
                             toDos={toDos[boardId]}
+                            key={boardId}
                         />
                     ))}
                     {provided.placeholder}

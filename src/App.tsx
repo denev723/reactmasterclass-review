@@ -9,7 +9,6 @@ import SideBar from "./components/SideBar";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { isActiveAtom, themeAtom } from "./atoms";
 import { BrowserRouter } from "react-router-dom";
-import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 
@@ -17,9 +16,14 @@ const GlobalStyles = createGlobalStyle`
     body {
         background-color: ${(props) => props.theme.bgColor};
     }
+
     a {
         text-decoration: none;
         color: #222;
+    }
+
+    button {
+        background-color: transparent;
     }
 `;
 

@@ -7,6 +7,7 @@ import CreateBoard from "../../components/CreateBoard";
 
 const Container = styled.div`
     padding: 0 100px;
+    min-height: 100vh;
 `;
 
 const Title = styled.h2`
@@ -20,11 +21,10 @@ const Title = styled.h2`
 function TrelloClone() {
     const setToDos = useSetRecoilState(trelloState);
     const onDragEnd = (info: DropResult) => {
-        const { destination, source, draggableId } = info;
+        const { destination, source } = info;
         if (!destination) return;
 
         if (destination.droppableId === "Boards") {
-            console.log(destination, source, draggableId);
             setToDos((boards) => {
                 const allBoards = Object.keys(boards);
                 const taskBoard = allBoards[source.index];
