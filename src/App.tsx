@@ -24,6 +24,8 @@ const GlobalStyles = createGlobalStyle`
 
     button {
         background-color: transparent;
+        border: 1px solid #222;
+        background-color: #fff;
     }
 `;
 

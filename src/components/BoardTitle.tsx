@@ -1,4 +1,4 @@
-import { faL, faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -11,17 +11,34 @@ const Title = styled.h3<IActive>`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0;
+    padding: 30px 20px 20px;
 
     p {
         margin-right: 10px;
         font-weight: bold;
         font-size: 24px;
         display: ${(props) => (props.isActive ? "none" : "block")};
+        color: #ecf0f1;
     }
 
     form {
         display: ${(props) => (props.isActive ? "block" : "none")};
+
+        input {
+            width: 50%;
+            font-size: 24px;
+            border: none;
+            background-color: transparent;
+            border-bottom: 2px solid #fff;
+
+            &:focus {
+                outline: none;
+            }
+
+            &::placeholder {
+                color: #bdc3c7;
+            }
+        }
     }
 `;
 
@@ -35,6 +52,8 @@ const BtnWrapper = styled.div<ITitle>`
 const Btn = styled.button`
     border: none;
     cursor: pointer;
+    font-size: 20px;
+    background-color: transparent;
 `;
 
 interface ITitle {
@@ -57,7 +76,7 @@ interface IForm {
 function BoardTitle({ boardId, index }: IBoardTitleProps) {
     const [isShow, setIsShow] = useState(false);
     const [isActive, setIsActive] = useState(false);
-    const { setValue, handleSubmit, register } = useForm<IForm>();
+    const { handleSubmit, register } = useForm<IForm>();
     const setToDos = useSetRecoilState(trelloState);
 
     const onDelete = () => {
@@ -74,7 +93,29 @@ function BoardTitle({ boardId, index }: IBoardTitleProps) {
         setIsActive((current) => !current);
     };
 
-    const onValid = ({ newId }: IForm) => {};
+    const onValid = ({ newId }: IForm) => {
+        if (newId === "") {
+            alert("한 글자 이상은 입력해야 합니다.");
+            setIsActive(false);
+            return;
+        }
+        setToDos((allBoards) => {
+            const boardKeys = Object.keys(allBoards);
+
+            boardKeys.splice(index, 1);
+            boardKeys.splice(index, 0, newId);
+
+            let newBoards = {};
+            boardKeys.map((boardKey, index) => {
+                return (newBoards = {
+                    ...newBoards,
+                    [boardKey]: Object.values(allBoards)[index]
+                });
+            });
+
+            return { ...newBoards };
+        });
+    };
 
     return (
         <Title
@@ -86,7 +127,7 @@ function BoardTitle({ boardId, index }: IBoardTitleProps) {
                 <input
                     type={"text"}
                     placeholder={boardId}
-                    {...register("newId")}
+                    {...register("newId", { required: true })}
                 />
             </form>
             <BtnWrapper isShow={isShow}>

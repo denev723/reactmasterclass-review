@@ -11,8 +11,8 @@ const Wrapper = styled.div<IWrapperProps>`
     color: #222;
     margin-right: 30px;
     flex: 0 0 auto;
-    background-color: ${(props) => (props.isMove ? "blue" : "cadetblue")};
-    padding: 0 20px 10px;
+    background-color: ${(props) => (props.isMove ? "#3498db" : "#2980b9")};
+    border: 1px solid ${(props) => (props.isMove ? "#fff" : "#222")};
 
     :last-child {
         margin-right: 0;
@@ -20,15 +20,16 @@ const Wrapper = styled.div<IWrapperProps>`
 `;
 
 const Area = styled.div<IAreaProps>`
-    min-height: 200px;
+    min-height: 400px;
     height: auto;
     background-color: ${(props) =>
         props.isDraggingOver
-            ? "#6c5ce7"
+            ? "#3498db"
             : props.isDraggingFromThis
             ? "#d63031"
-            : "red"};
+            : "#2980b9"};
     position: relative;
+    border-radius: 8px;
 `;
 
 const Form = styled.form`
