@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { toDoSelector, toDoState } from "../../atoms";
@@ -42,30 +43,39 @@ const FlexWrapper = styled.div`
 function RecoilToDos() {
     const [toDos, doing, done] = useRecoilValue(toDoSelector);
     return (
-        <Container>
-            <Title>Recoil To Do List</Title>
-            <CreateToDo />
-            <FlexWrapper>
+        <>
+            <Helmet>
+                <title>Recoil To Dos</title>
+            </Helmet>
+            <Container>
+                <Title>Recoil To Do List</Title>
+                <CreateToDo />
+                <FlexWrapper>
+                    <List>
+                        <SubTitle>
+                            {toDos.length > 0 ? "해야할 일" : null}
+                        </SubTitle>
+                        {toDos.map((toDo) => (
+                            <ToDo key={toDo.id} {...toDo} />
+                        ))}
+                    </List>
+                    <List>
+                        <SubTitle>
+                            {doing.length > 0 ? "진행중" : null}
+                        </SubTitle>
+                        {doing.map((toDo) => (
+                            <ToDo key={toDo.id} {...toDo} />
+                        ))}
+                    </List>
+                </FlexWrapper>
                 <List>
-                    <SubTitle>{toDos.length > 0 ? "해야할 일" : null}</SubTitle>
-                    {toDos.map((toDo) => (
+                    <SubTitle>{done.length > 0 ? "완료" : null}</SubTitle>
+                    {done.map((toDo) => (
                         <ToDo key={toDo.id} {...toDo} />
                     ))}
                 </List>
-                <List>
-                    <SubTitle>{doing.length > 0 ? "진행중" : null}</SubTitle>
-                    {doing.map((toDo) => (
-                        <ToDo key={toDo.id} {...toDo} />
-                    ))}
-                </List>
-            </FlexWrapper>
-            <List>
-                <SubTitle>{done.length > 0 ? "완료" : null}</SubTitle>
-                {done.map((toDo) => (
-                    <ToDo key={toDo.id} {...toDo} />
-                ))}
-            </List>
-        </Container>
+            </Container>
+        </>
     );
 }
 

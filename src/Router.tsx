@@ -4,6 +4,7 @@ import CoinTracker from "./routes/coinTracker/CoinTracker";
 import Home from "./routes/Home";
 import RecoilToDos from "./routes/recoilTodos/RecoilToDos";
 import TrelloClone from "./routes/trelloClone/TrelloClone";
+import Animation from "./routes/reactAnimation/Animation";
 
 function Router() {
     return (
@@ -22,6 +23,9 @@ function Router() {
             </Route>
             <Route path={"/trello-clone"}>
                 <TrelloClone />
+            </Route>
+            <Route path={"/animation"}>
+                <Animation />
             </Route>
         </Switch>
     );

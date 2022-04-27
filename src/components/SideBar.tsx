@@ -71,6 +71,9 @@ function SideBar() {
                 <MenuItem>
                     <Link to={"/trello-clone"}>Trello Clone</Link>
                 </MenuItem>
+                <MenuItem>
+                    <Link to={"/animation"}>React Animation</Link>
+                </MenuItem>
             </Menu>
         </Container>
     );

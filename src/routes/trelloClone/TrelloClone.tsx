@@ -1,4 +1,5 @@
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { Helmet } from "react-helmet";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { trelloState } from "../../atoms";
@@ -71,13 +72,18 @@ function TrelloClone() {
     };
 
     return (
-        <Container>
-            <Title>Trello Clone</Title>
-            <CreateBoard />
-            <DragDropContext onDragEnd={onDragEnd}>
-                <Boards />
-            </DragDropContext>
-        </Container>
+        <>
+            <Helmet>
+                <title>Trello Clone</title>
+            </Helmet>
+            <Container>
+                <Title>Trello Clone</Title>
+                <CreateBoard />
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Boards />
+                </DragDropContext>
+            </Container>
+        </>
     );
 }
 
