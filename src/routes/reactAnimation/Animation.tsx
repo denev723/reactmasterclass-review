@@ -178,12 +178,12 @@ const toggleVars = {
 };
 
 const sliderVars = {
-    initial: {
-        x: 500,
+    entry: (back: boolean) => ({
+        x: back ? -500 : 500,
         opacity: 0,
         scale: 0
-    },
-    visible: {
+    }),
+    center: {
         x: 0,
         opacity: 1,
         scale: 1,
@@ -191,14 +191,14 @@ const sliderVars = {
             duration: 1
         }
     },
-    exit: {
-        x: -500,
+    exit: (back: boolean) => ({
+        x: back ? 500 : -500,
         opacity: 0,
         scale: 0,
         transition: {
             duration: 1
         }
-    }
+    })
 };
 
 function Animation() {
@@ -220,9 +220,15 @@ function Animation() {
     const [showing, setShowing] = useState(false);
     const toggleShowing = () => setShowing((current) => !current);
     const [visible, setVisible] = useState(1);
-    const nextPlease = () =>
+    const [back, setBack] = useState(false);
+    const nextPlease = () => {
+        setBack(false);
         setVisible((prev) => (prev === 10 ? 10 : prev + 1));
-    const prevPlease = () => setVisible((prev) => (prev === 1 ? 1 : prev - 1));
+    };
+    const prevPlease = () => {
+        setBack(true);
+        setVisible((prev) => (prev === 1 ? 1 : prev - 1));
+    };
 
     useEffect(() => {
         // x.onChange(() => console.log(x.get()));
@@ -312,19 +318,16 @@ function Animation() {
                 </AnimatePresence>
             </SubWrapper>
             <SubWrapper style={{ background: gradient, flexDirection: "row" }}>
-                <AnimatePresence>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) =>
-                        i === visible ? (
-                            <SubBox
-                                variants={sliderVars}
-                                initial="initial"
-                                animate="visible"
-                                exit="exit"
-                                key={i}>
-                                {i}
-                            </SubBox>
-                        ) : null
-                    )}
+                <AnimatePresence exitBeforeEnter>
+                    <SubBox
+                        custom={back}
+                        variants={sliderVars}
+                        initial="entry"
+                        animate="center"
+                        exit="exit"
+                        key={visible}>
+                        {visible}
+                    </SubBox>
                 </AnimatePresence>
                 <button onClick={nextPlease}>Next</button>
                 <button onClick={prevPlease}>Prev</button>
