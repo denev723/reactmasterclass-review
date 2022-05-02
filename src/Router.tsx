@@ -5,6 +5,7 @@ import Home from "./routes/Home";
 import RecoilToDos from "./routes/recoilTodos/RecoilToDos";
 import TrelloClone from "./routes/trelloClone/TrelloClone";
 import Animation from "./routes/reactAnimation/Animation";
+import Nomflix from "./routes/nomflix/Nomflix";
 
 function Router() {
     return (
@@ -26,6 +27,9 @@ function Router() {
             </Route>
             <Route path={"/animation"}>
                 <Animation />
+            </Route>
+            <Route path={"/nomflix-clone"}>
+                <Nomflix />
             </Route>
         </Switch>
     );

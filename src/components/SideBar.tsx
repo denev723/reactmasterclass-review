@@ -74,6 +74,9 @@ function SideBar() {
                 <MenuItem>
                     <Link to={"/animation"}>React Animation</Link>
                 </MenuItem>
+                <MenuItem>
+                    <Link to={"/nomflix-clone"}>Nomflix</Link>
+                </MenuItem>
             </Menu>
         </Container>
     );
